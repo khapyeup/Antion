@@ -24,7 +24,7 @@ const features = [
 export default function Page() {
   return (
     <div>
-      <header className="sticky top-0 z-50">
+      <header className="sticky top-0 z-50 shadow-md">
         <Navbar />
       </header>
       <div className="flex flex-col items-center justify-center h-[calc(100vh-56px)] gap-6 pt-5 px-5">
@@ -36,7 +36,7 @@ export default function Page() {
         </h3>
         <Link
           href="/login"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400"
+          className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-400 shadow-lg transition-transform transform hover:scale-105"
         >
           Get Antion Free
         </Link>
@@ -57,7 +57,7 @@ export default function Page() {
             <div key={i} className="space-y-2 ">
               {feature.icon}
               <h2 className="text-xl sm:text-2xl font-semibold">{feature.name}</h2>
-              <p className="text-xl sm:text-2xl">{feature.description}</p>
+              <p className="text-lg sm:text-xl text-gray-600">{feature.description}</p>
             </div>
           ))}
         </div>
