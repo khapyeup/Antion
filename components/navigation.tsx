@@ -4,6 +4,7 @@ import useMobileDetect from "@/hooks/useMobileDetect";
 import clsx from "clsx";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useRef, useState } from "react";
+import UserItems from "./user-item";
 
 export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -52,14 +53,16 @@ export default function Navigation() {
       <aside
         ref={asideRef}
         className={clsx(
-          "w-full sm:w-60 group/sidebar h-full bg-gray-100 overflow-y-auto relative flex flex-col z-[99999] transition-all ease-in-out"
+          "w-full sm:w-60 group/sidebar h-full bg-gray-100 overflow-y-auto relative flex flex-col z-[99999] transition-all duration-300 ease-in-out"
         )}
       >
-        <div className="flex items-center justify-between p-1 hover:bg-gray-100 rounded-md">
-          <p>Action items</p>
+        <div className="flex items-center justify-between  p-2  rounded-md hover:bg-neutral-200">
+          
+          <UserItems/>
+          
           <ChevronsLeft
             onClick={handleCollapse}
-            className="opacity-100 sm:opacity-0 cursor-pointer group-hover/sidebar:opacity-100  size-8 p-2 hover:bg-gray-200 hover:text-black rounded-md text-gray-500 "
+            className="opacity-100 sm:opacity-0 cursor-pointer group-hover/sidebar:opacity-100  size-8 p-2 hover:bg-neutral-200 hover:text-black rounded-md text-gray-500 "
           />
         </div>
         <div className="mt-4">
@@ -76,7 +79,9 @@ export default function Navigation() {
       >
         <ChevronsRight
           onClick={handleCollapse}
-          className={`${collapsed ? "block" : "hidden"}  cursor-pointer size-8 p-2 hover:bg-gray-200 hover:text-black rounded-md text-neutral-800 `}
+          className={`${
+            collapsed ? "block" : "hidden"
+          }  cursor-pointer size-8 p-2 hover:bg-gray-200 hover:text-black rounded-md text-neutral-800 `}
         />
       </div>
     </>
