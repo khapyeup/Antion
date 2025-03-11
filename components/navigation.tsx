@@ -1,15 +1,19 @@
 "use client";
 
-import useMobileDetect from "@/hooks/useMobileDetect";
 import clsx from "clsx";
-import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, Plus } from "lucide-react";
 import { useRef, useState } from "react";
 import UserItems from "./user-item";
+import { createDocument } from "@/lib/action";
+import { toast } from "sonner";
+import Documents from "./documents";
 
 export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
+ 
+
 
   function handleResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -48,6 +52,15 @@ export default function Navigation() {
     }
   }
 
+  async function handleCreateDocument() {
+    const promise = createDocument("Untiled", null);
+    toast.promise(promise, {
+      loading: "Creating document...",
+      success: "Document created",
+      error: "Error",
+    });
+  }
+
   return (
     <>
       <aside
@@ -57,16 +70,25 @@ export default function Navigation() {
         )}
       >
         <div className="flex items-center justify-between  p-2  rounded-md hover:bg-neutral-200">
-          
-          <UserItems/>
-          
+          <UserItems />
+
           <ChevronsLeft
             onClick={handleCollapse}
-            className="opacity-100 sm:opacity-0 cursor-pointer group-hover/sidebar:opacity-100  size-8 p-2 hover:bg-neutral-200 hover:text-black rounded-md text-gray-500 "
+            className="opacity-100 sm:opacity-0 cursor-pointer group-hover/sidebar:opacity-100  size-5  hover:bg-neutral-200 hover:text-black rounded-md text-gray-500 "
           />
         </div>
+
         <div className="mt-4">
-          <p>Documents</p>
+          <div className="flex justify-between items-center p-2 hover:bg-neutral-200">
+            <label className="text-sm">Private</label>
+            <Plus
+              onClick={handleCreateDocument}
+              className="size-5 cursor-pointer hover:bg-neutral-300 rounded-sm"
+            />
+          </div>
+          <div>
+            
+          </div>
         </div>
         <div
           onMouseDown={handleResize}
