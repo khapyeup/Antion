@@ -11,6 +11,7 @@ export default function UserItems() {
 
   return (
     <div
+    
       className="flex relative items-center text-sm  w-full gap-x-2 cursor-pointer"
       onClick={() => setOpen(!open)}
     >
@@ -31,8 +32,8 @@ export default function UserItems() {
 
       {/* Dropdown Menu */}
       {open && (
-        <ul className="absolute top-full outline bg-white outline-neutral-300 p-1 rounded-md shadow-lg w-full max-w-sm">
-          <li className="p-1.5 text-neutral-500">{session?.user?.email}</li>
+        <ul className="absolute top-full outline bg-white outline-neutral-300 p-1 rounded-md shadow-lg w-full ">
+          <li  className="p-1.5 text-neutral-500">{session?.user?.email}</li>
           <li className="p-1.5">
             <div className="w-full h-0.5 bg-neutral-400"></div>
           </li>
