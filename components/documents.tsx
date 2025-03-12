@@ -47,7 +47,7 @@ function Document({
         </div>
         <Plus
           onClick={() => createDocument("Untitled", id)}
-          className="size-5 hover:bg-neutral-300"
+          className="size-5 hover:bg-neutral-300 hover:text-black"
         />
       </div>
       {expanded && <Documents parentDocument={id} level={level + 1}/>}

@@ -80,10 +80,10 @@ export default function Navigation() {
 
         <div className="mt-4">
           <div className="flex justify-between items-center p-2 hover:bg-neutral-200">
-            <label className="text-sm">Private</label>
+            <label className="text-xs text-neutral-500">Private</label>
             <Plus
               onClick={handleCreateDocument}
-              className="size-5 cursor-pointer hover:bg-neutral-300 rounded-sm"
+              className="size-5 cursor-pointer text-neutral-500 hover:text-black hover:bg-neutral-300 rounded-sm"
             />
           </div>
           <div>
