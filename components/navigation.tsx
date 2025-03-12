@@ -87,7 +87,7 @@ export default function Navigation() {
             />
           </div>
           <div>
-            
+            <Documents parentDocument={null} level={0}/>
           </div>
         </div>
         <div
