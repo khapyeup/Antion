@@ -8,12 +8,14 @@ import { createDocument } from "@/lib/action";
 import { toast } from "sonner";
 import Documents from "./documents";
 
+import { useSWRConfig } from "swr";
+import { useDocument } from "@/hooks/useDocument";
+
 export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
- 
-
+  const { mutate } = useDocument(null);
 
   function handleResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -53,7 +55,9 @@ export default function Navigation() {
   }
 
   async function handleCreateDocument() {
-    const promise = createDocument("Untiled", null);
+    const promise = createDocument("Untiled", null).then(() => {
+      mutate();
+    });
     toast.promise(promise, {
       loading: "Creating document...",
       success: "Document created",
@@ -87,7 +91,7 @@ export default function Navigation() {
             />
           </div>
           <div>
-            <Documents parentDocument={null} level={0}/>
+            <Documents parentDocument={null} level={0} />
           </div>
         </div>
         <div

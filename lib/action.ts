@@ -29,6 +29,7 @@ export async function createDocument(
     parentDocument,
     isArchived: false,
     isPuplished: false,
-  });
+  }).returning();
+  
   return document;
 }
