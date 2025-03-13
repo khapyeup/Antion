@@ -15,7 +15,7 @@ export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
-  const { mutate } = useDocument(null);
+  const { mutate } = useSWRConfig();
 
   function handleResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -56,7 +56,7 @@ export default function Navigation() {
 
   async function handleCreateDocument() {
     const promise = createDocument("Untiled", null).then(() => {
-      mutate();
+      mutate('/api/documents');
     });
     toast.promise(promise, {
       loading: "Creating document...",

@@ -3,7 +3,7 @@
 import { auth, signIn, signOut } from "@/auth";
 import db from "./db";
 import { documentsTable } from "./schema";
-
+import { eq } from "drizzle-orm";
 
 export async function login() {
   await signIn("github", { redirectTo: "/documents" });
@@ -23,13 +23,40 @@ export async function createDocument(
     return;
   }
 
-  const document = await db.insert(documentsTable).values({
-    userId,
-    title,
-    parentDocument,
-    isArchived: false,
-    isPuplished: false,
-  }).returning();
-  
+  const document = await db
+    .insert(documentsTable)
+    .values({
+      userId,
+      title,
+      parentDocument,
+      isArchived: false,
+      isPuplished: false,
+    })
+    .returning();
+
   return document;
+}
+
+export async function deleteDocument(id: string) {
+  try {
+    const deletedDocument = await db
+      .update(documentsTable)
+      .set({ isArchived: true })
+      .where(eq(documentsTable.id, id))
+      .returning();
+
+    if (!deletedDocument[0]) {
+      throw new Error("Document not found");
+    }
+    
+    return {
+      success: true,
+      data: deletedDocument[0],
+    };
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Failed to delete",
+    };
+  }
 }
