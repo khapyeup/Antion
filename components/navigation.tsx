@@ -1,15 +1,15 @@
 "use client";
 
 import clsx from "clsx";
-import { ChevronsLeft, ChevronsRight, Plus } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, Home, Plus, Trash } from "lucide-react";
 import { useRef, useState } from "react";
 import UserItems from "./user-item";
 import { createDocument } from "@/lib/action";
 import { toast } from "sonner";
 import Documents from "./documents";
-
 import { useSWRConfig } from "swr";
-import { useDocument } from "@/hooks/useDocument";
+import Link from "next/link";
+import TrashPanel from "@/components/trash";
 
 export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
@@ -56,7 +56,7 @@ export default function Navigation() {
 
   async function handleCreateDocument() {
     const promise = createDocument("Untiled", null).then(() => {
-      mutate('/api/documents');
+      mutate("/api/documents");
     });
     toast.promise(promise, {
       loading: "Creating document...",
@@ -70,7 +70,7 @@ export default function Navigation() {
       <aside
         ref={asideRef}
         className={clsx(
-          "w-full sm:w-60 group/sidebar h-full bg-gray-100 overflow-y-auto relative flex flex-col z-[99999] transition-all duration-300 ease-in-out"
+          "w-full sm:w-60 group/sidebar h-full overflow-y-scroll max-h-screen bg-gray-100 relative flex flex-col z-[99] transition-all duration-300 ease-in-out"
         )}
       >
         <div className="flex items-center justify-between  p-2  rounded-md hover:bg-neutral-200">
@@ -82,17 +82,30 @@ export default function Navigation() {
           />
         </div>
 
-        <div className="mt-4">
+        <Link
+          href="/documents"
+          className="flex gap-2 items-center cursor-pointer p-2 hover:bg-neutral-200"
+        >
+          <Home className="size-5  text-neutral-500 " />
+          <p className=" text-neutral-500 text-sm">Home</p>
+        </Link>
+
+        <div className="">
           <div className="flex justify-between items-center p-2 hover:bg-neutral-200">
-            <label className="text-xs text-neutral-500">Private</label>
+            <label className="text-sm text-neutral-500">Private</label>
             <Plus
               onClick={handleCreateDocument}
               className="size-5 cursor-pointer text-neutral-500 hover:text-black hover:bg-neutral-300 rounded-sm"
             />
           </div>
-          <div>
-            <Documents parentDocument={null} level={0} />
-          </div>
+
+          <Documents parentDocument={null} level={0} />
+          <TrashPanel>
+            <div className="flex gap-2 items-center cursor-pointer p-2 hover:bg-neutral-200">
+              <Trash className="size-5  text-neutral-500 " />
+              <p className="text-sm text-neutral-500">Trash</p>
+            </div>
+          </TrashPanel>
         </div>
         <div
           onMouseDown={handleResize}

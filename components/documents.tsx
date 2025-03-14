@@ -22,7 +22,7 @@ export default function Documents({
   }
 
   return (
-    <div className={`w-full`}>
+    <div className={`w-full `}>
       <div
         style={{ paddingLeft: level === 0 ? "8px" : `${12 * level}px` }}
         className={`w-full p-1 text-neutral-500 hidden last:block`}
