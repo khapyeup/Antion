@@ -9,13 +9,16 @@ import { toast } from "sonner";
 import Documents from "./documents";
 import { useSWRConfig } from "swr";
 import Link from "next/link";
-import TrashPanel from "@/components/trash";
+import Dialog from "@/components/trash";
+import { useTrash } from "@/hooks/useTrash";
 
 export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
+  const [isTrashOpen, setIsTrashOpen] = useState(false);
   const { mutate } = useSWRConfig();
+  const { data: trashItems, isLoading, error } = useTrash();
 
   function handleResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -70,12 +73,11 @@ export default function Navigation() {
       <aside
         ref={asideRef}
         className={clsx(
-          "w-full sm:w-60 group/sidebar h-full overflow-y-scroll max-h-screen bg-gray-100 relative flex flex-col z-[99] transition-all duration-300 ease-in-out"
+          "w-full sm:w-60 group/sidebar h-full overflow-y-auto  max-h-screen bg-gray-100 relative flex flex-col z-[99] transition-all duration-300 ease-in-out"
         )}
       >
         <div className="flex items-center justify-between  p-2  rounded-md hover:bg-neutral-200">
           <UserItems />
-
           <ChevronsLeft
             onClick={handleCollapse}
             className="opacity-100 sm:opacity-0 cursor-pointer group-hover/sidebar:opacity-100  size-5  hover:bg-neutral-200 hover:text-black rounded-md text-gray-500 "
@@ -90,7 +92,7 @@ export default function Navigation() {
           <p className=" text-neutral-500 text-sm">Home</p>
         </Link>
 
-        <div className="">
+        <div>
           <div className="flex justify-between items-center p-2 hover:bg-neutral-200">
             <label className="text-sm text-neutral-500">Private</label>
             <Plus
@@ -100,12 +102,26 @@ export default function Navigation() {
           </div>
 
           <Documents parentDocument={null} level={0} />
-          <TrashPanel>
-            <div className="flex gap-2 items-center cursor-pointer p-2 hover:bg-neutral-200">
-              <Trash className="size-5  text-neutral-500 " />
-              <p className="text-sm text-neutral-500">Trash</p>
+        </div>
+        <div>
+          <div
+            onClick={() => setIsTrashOpen(true)}
+            className="flex gap-2 items-center cursor-pointer p-2 hover:bg-neutral-200"
+          >
+            <Trash className="size-5  text-neutral-500 " />
+            <p className=" text-neutral-500 text-sm">Trash</p>
+          </div>
+          <Dialog
+            isOpen={isTrashOpen}
+            onClose={() => setIsTrashOpen(false)}
+            title="Sample Dialog"
+          >
+            <div className="flex flex-col w-[414px] min-w-[180px] max-w-[calc(-24px + 100vw)] h-1/2 max-h-2/3">
+              <div className=" my-2.5">
+                <input className="w-full"/>
+              </div>
             </div>
-          </TrashPanel>
+          </Dialog>
         </div>
         <div
           onMouseDown={handleResize}

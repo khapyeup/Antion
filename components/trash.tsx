@@ -1,27 +1,34 @@
-"use client";
+import { ReactNode } from "react";
 
-import { useRef, useState } from "react";
+interface DialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}
 
-export default function TrashPanel({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const triggerRef = useRef(null);
-
-  function handleClose(e: React.MouseEvent) {
-    e.stopPropagation();
-    setIsOpen(false);
-  }
+const Dialog = ({ isOpen, onClose, title, children }: DialogProps) => {
+  if (!isOpen) return null;
 
   return (
-    <div className="w-full ">
-      <div onClick={() => setIsOpen(!isOpen)}>{children}</div>
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-lg shadow-lg max-w-md w-full p-6"
+      >
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+        </div>
 
-      {isOpen && (
-        <div>Popover</div>
-      )}
+        {/* Content */}
+        <div className="text-gray-600">{children}</div>
+      </div>
     </div>
   );
-}
+};
+
+export default Dialog;

@@ -6,17 +6,17 @@ import Link from "next/link";
 const features = [
   {
     name: "Docs",
-    icon: <FileText size={70}/>,
+    icon: <FileText size={70} />,
     description: "Build any type, communicate any idea",
   },
   {
     name: "Wiki",
-    icon: <Book size={70}/>,
+    icon: <Book size={70} />,
     description: "One home base for all your knowlwedge",
   },
   {
     name: "Goals",
-    icon: <Goal size={70}/>,
+    icon: <Goal size={70} />,
     description: "Track progress toward what is most important",
   },
 ];
@@ -51,13 +51,19 @@ export default function Page() {
       </div>
 
       <div className="pt-5 px-5 mt-10 min-h-screen flex justify-center flex-col">
-        <h2 className="font-bold text-4xl sm:text-6xl w-1/2">Everything you need to do your best work.</h2>
+        <h2 className="font-bold text-4xl sm:text-6xl w-1/2">
+          Everything you need to do your best work.
+        </h2>
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12">
           {features.map((feature, i) => (
             <div key={i} className="space-y-2 ">
               {feature.icon}
-              <h2 className="text-xl sm:text-2xl font-semibold">{feature.name}</h2>
-              <p className="text-lg sm:text-xl text-gray-600">{feature.description}</p>
+              <h2 className="text-xl sm:text-2xl font-semibold">
+                {feature.name}
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-600">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

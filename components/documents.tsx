@@ -25,7 +25,7 @@ export default function Documents({
     <div className={`w-full `}>
       <div
         style={{ paddingLeft: level === 0 ? "8px" : `${12 * level}px` }}
-        className={`w-full p-1 text-neutral-500 hidden last:block`}
+        className={`w-full p-2 text-neutral-500 hidden last:block`}
       >
         No page inside
       </div>
@@ -107,11 +107,11 @@ function Document({
       <div
         onClick={handleExpand}
         style={{ paddingLeft: level === 0 ? `8px` : `${15 * level}px` }}
-        className="group/item flex items-center p-1 justify-between min-h-7 cursor-pointer text-neutral-600 hover:bg-neutral-200"
+        className="group/item flex items-center p-2 justify-between min-h-7 cursor-pointer text-neutral-600 hover:bg-neutral-200"
       >
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1 flex-wrap text-gray-500">
           <File className="size-5" />
-          <span>{title}</span>
+          <span className="text-sm p-1">{title}</span>
         </div>
         <div className="flex gap-2 items-center">
           <Trash
