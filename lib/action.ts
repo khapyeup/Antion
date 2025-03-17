@@ -3,7 +3,8 @@
 import { auth, signIn, signOut } from "@/auth";
 import db from "./db";
 import { documentsTable } from "./schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
+import { getAllChildDocument } from "./helper";
 
 export async function login() {
   await signIn("github", { redirectTo: "/documents" });
@@ -39,24 +40,35 @@ export async function createDocument(
 
 export async function deleteDocument(id: string) {
   try {
-    const deletedDocument = await db
+    console.log("Delete: ", id);
+    //Delete parent document first
+    await db
       .update(documentsTable)
       .set({ isArchived: true })
-      .where(eq(documentsTable.id, id))
-      .returning();
+      .where(eq(documentsTable.id, id));
+    //Delete child of parent document after that
+    const allChildren = await getAllChildDocument(id);
 
-    if (!deletedDocument[0]) {
-      throw new Error("Document not found");
+    if (allChildren.length > 0) {
+      await db
+        .update(documentsTable)
+        .set({ isArchived: true })
+        .where(
+          inArray(
+            documentsTable.id,
+            allChildren.map((child) => child.id)
+          )
+        );
     }
 
     return {
       success: true,
-      data: deletedDocument[0],
     };
   } catch (e) {
+    console.log(e);
     return {
       success: false,
-      error: e instanceof Error ? e.message : "Failed to delete",
+      error: "Failed to delete",
     };
   }
 }

@@ -13,7 +13,7 @@ export async function GET(
     return new Response("Not authenticated", { status: 404 });
   }
   const { slug } = await params;
-  console.log(slug);
+  
     const documents = await db.query.documentsTable.findMany({
       where: and(
         eq(documentsTable.userId, session.user.id),

@@ -1,24 +1,32 @@
 "use client";
 
 import clsx from "clsx";
-import { ChevronsLeft, ChevronsRight, Home, Plus, Trash } from "lucide-react";
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  File,
+  Home,
+  Plus,
+  Trash,
+  Undo2,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import UserItems from "./user-item";
-import { createDocument } from "@/lib/action";
+import { createDocument, restoreDocument } from "@/lib/action";
 import { toast } from "sonner";
 import Documents from "./documents";
 import { useSWRConfig } from "swr";
 import Link from "next/link";
-import Dialog from "@/components/trash";
 import { useTrash } from "@/hooks/useTrash";
+import TrashPanel from "./trash-panel";
 
 export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
-  const [isTrashOpen, setIsTrashOpen] = useState(false);
+  
   const { mutate } = useSWRConfig();
-  const { data: trashItems, isLoading, error } = useTrash();
+  
 
   function handleResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -28,7 +36,7 @@ export default function Navigation() {
         asideRef.current &&
         divRef.current &&
         e.clientX >= 208 &&
-        e.clientX <= 350
+        e.clientX <= 400
       ) {
         asideRef.current.style.setProperty("width", `${e.clientX}px`);
         divRef.current.style.setProperty("left", `${e.clientX}px`);
@@ -68,6 +76,8 @@ export default function Navigation() {
     });
   }
 
+  
+
   return (
     <>
       <aside
@@ -103,26 +113,7 @@ export default function Navigation() {
 
           <Documents parentDocument={null} level={0} />
         </div>
-        <div>
-          <div
-            onClick={() => setIsTrashOpen(true)}
-            className="flex gap-2 items-center cursor-pointer p-2 hover:bg-neutral-200"
-          >
-            <Trash className="size-5  text-neutral-500 " />
-            <p className=" text-neutral-500 text-sm">Trash</p>
-          </div>
-          <Dialog
-            isOpen={isTrashOpen}
-            onClose={() => setIsTrashOpen(false)}
-            title="Sample Dialog"
-          >
-            <div className="flex flex-col w-[414px] min-w-[180px] max-w-[calc(-24px + 100vw)] h-1/2 max-h-2/3">
-              <div className=" my-2.5">
-                <input className="w-full"/>
-              </div>
-            </div>
-          </Dialog>
-        </div>
+        <TrashPanel/>
         <div
           onMouseDown={handleResize}
           className="opacity-0 group-hover/sidebar:opacity-100 w-1 transition top-0 bg-gray-300 h-full cursor-e-resize absolute right-0"

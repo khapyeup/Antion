@@ -85,20 +85,22 @@ function Document({
 
   async function handleDeleteDocument(e: React.MouseEvent) {
     e.stopPropagation();
-    const promise = deleteDocument(id);
+    const promise = deleteDocument(id).then((result) => {
+      if (!result.success) {
+        throw new Error(result.error || "Failed to delete document");
+      }
+      // Revalidate both the parent document's children and the trash
+      const parentKey = parentDocument ? `/api/documents/${parentDocument}` : `/api/documents`;
+      return Promise.all([
+        mutate(parentKey), // Update the document list
+        mutate("/api/trash"), // Update the trash
+      ]);
+    });
 
     toast.promise(promise, {
       loading: "Deleting...",
-      success: (result) => {
-        if (result.success) {
-          mutate(parentDocument ?  `/api/documents/${parentDocument}` : `/api/documents` )
-          return "Document moved to trash successfully";
-        }
-        throw new Error(result.error);
-      },
-      error: (err) => {
-        return err instanceof Error ? err.message : "Failed to delete document";
-      },
+      success: "Document moved to trash successfully",
+      error: (err) => err.message || "Failed to delete document",
     });
   }
 

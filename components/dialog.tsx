@@ -17,7 +17,7 @@ const Dialog = ({ isOpen, onClose, title, children }: DialogProps) => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-lg shadow-lg max-w-md w-full p-6"
+        className="bg-white rounded-lg shadow-lg max-w-md w-full p-4"
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
