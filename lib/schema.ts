@@ -6,7 +6,7 @@ export const documentsTable = pgTable("documents", {
   title: text(),
   userId: uuid().notNull(),
   isArchived: boolean(),
-  parentDocument: uuid().references((): AnyPgColumn => documentsTable.id),
+  parentDocument: uuid().references((): AnyPgColumn => documentsTable.id, {onDelete: 'cascade'}),
   icon: text(),
   coverImage: text(),
   content: text(),

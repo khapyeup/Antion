@@ -17,12 +17,12 @@ export default function Page() {
   return (
     <div className="w-full flex-col gap-10 h-screen flex justify-center items-center">
       <h1 className="text-3xl font-semibold tracking-wide">{welcomeText}</h1>
-      <div className="w-full px-10 md:px-30">
+      {/* <div className="w-full px-10 md:px-30">
         <div  className="size-30 outline outline-neutral-200 rounded-lg flex flex-col gap-2 justify-center items-center hover:outline-neutral-400  cursor-pointer">
             <PlusCircle className="text-neutral-500"/>
             <p className="text-neutral-500 text-sm">New page</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

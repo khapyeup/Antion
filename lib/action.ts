@@ -40,7 +40,7 @@ export async function createDocument(
 
 export async function deleteDocument(id: string) {
   try {
-    console.log("Delete: ", id);
+    
     //Delete parent document first
     await db
       .update(documentsTable)
@@ -90,5 +90,17 @@ export async function restoreDocument(id: string) {
       success: false,
       error: e instanceof Error ? e.message : "Failed to restore",
     };
+  }
+}
+
+export async function removeForever(id: string) {
+  try {
+    console.log('id', id)
+    const primise = await db.delete(documentsTable).where(eq(documentsTable.id, id)).returning();
+    console.log(primise)
+    return { success: true };
+  } catch (error) {
+    console.log(error)
+    return { success: false, error };
   }
 }
