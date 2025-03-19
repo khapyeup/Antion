@@ -3,7 +3,7 @@ import { AdapterAccountType } from "next-auth/adapters";
 
 export const documentsTable = pgTable("documents", {
   id: uuid().primaryKey().defaultRandom(),
-  title: text(),
+  title: text().notNull(),
   userId: uuid().notNull(),
   isArchived: boolean(),
   parentDocument: uuid().references((): AnyPgColumn => documentsTable.id, {onDelete: 'cascade'}),

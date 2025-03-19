@@ -1,6 +1,7 @@
 import { Ellipsis } from "lucide-react";
 
-export default function Header() {
+export default function Header({title}: {title: string}) {
+
   return (
     <header className="bg-white select-none max-w-full">
       <div className="max-w-full h-12 opacity-100 transition-opacity relative left-0">

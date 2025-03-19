@@ -83,7 +83,7 @@ export async function restoreDocument(id: string) {
     if (!restoredDocument[0]) {
       throw new Error("Document not found");
     }
-
+    
     return { success: true, data: restoredDocument[0] };
   } catch (e) {
     return {
