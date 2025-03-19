@@ -8,6 +8,7 @@ import DocumentSkeleton from "@/components/document-skeletion";
 import { useDocument } from "@/hooks/useDocument";
 import { useChildDocument } from "@/hooks/useChildDocument";
 import { useSWRConfig } from "swr";
+import Link from "next/link";
 
 export default function Documents({
   parentDocument,
@@ -106,7 +107,8 @@ function Document({
 
   return (
     <>
-      <div
+      <Link
+        href={`/documents/${id}`}
         onClick={handleExpand}
         style={{ paddingLeft: level === 0 ? `8px` : `${15 * level}px` }}
         className="group/item flex items-center p-2 justify-between min-h-7 cursor-pointer text-neutral-600 hover:bg-neutral-200"
@@ -125,7 +127,7 @@ function Document({
             className="size-5 hover:bg-neutral-300 hover:text-black"
           />
         </div>
-      </div>
+      </Link>
 
       {expanded && <Documents parentDocument={id} level={level + 1} />}
     </>
