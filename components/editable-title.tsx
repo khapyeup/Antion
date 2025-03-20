@@ -3,12 +3,14 @@
 import { updateDocument } from "@/lib/action";
 import { documentsTable } from "@/lib/schema";
 import { useRef, useState } from "react";
+import { useSWRConfig } from "swr";
 
 type Document = typeof documentsTable.$inferSelect;
 
 export default function Title({ document }: { document: Document }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(document.title || "Untitled");
+  const { mutate } = useSWRConfig();
 
   function enableInput() {
     setIsEditing(true);
@@ -17,13 +19,14 @@ export default function Title({ document }: { document: Document }) {
     setIsEditing(false);
   }
   async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (title === "") {
-      setTitle("Untitled");
-    } else {
-      setTitle(e.target.value);
-    }
+    const newTitle = e.target.value || "Untitled";
+    setTitle(newTitle);
 
-    await updateDocument(document.id, title);
+    await updateDocument(document.id, newTitle);
+
+    // Revalidate the SWR cache for the document
+    mutate(`/api/documents/${document.parentDocument}`);
+    mutate('/api/documents')
   }
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
