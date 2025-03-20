@@ -1,0 +1,54 @@
+"use client";
+
+import { updateDocument } from "@/lib/action";
+import { documentsTable } from "@/lib/schema";
+import { useRef, useState } from "react";
+
+type Document = typeof documentsTable.$inferSelect;
+
+export default function Title({ document }: { document: Document }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState(document.title || "Untitled");
+
+  function enableInput() {
+    setIsEditing(true);
+  }
+  function disableInput() {
+    setIsEditing(false);
+  }
+  async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (title === "") {
+      setTitle("Untitled");
+    } else {
+      setTitle(e.target.value);
+    }
+
+    await updateDocument(document.id, title);
+  }
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      disableInput();
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-x-1">
+      {isEditing ? (
+        <input
+          value={title}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          type="text"
+          className="h-7 px-2 outline outline-neutral-300 rounded-md"
+        />
+      ) : (
+        <button
+          onClick={enableInput}
+          className="text-sm px-2 py-1 hover:bg-neutral-200 rounded-md cursor-pointer"
+        >
+          {title}
+        </button>
+      )}
+    </div>
+  );
+}

@@ -19,7 +19,7 @@ export default async function Page({
   }
   return (
     <div className="flex flex-col overflow-hidden w-full">
-      {document.isArchived ? <Banner id={document.id}/> : <Header title={document.title} />}
+      {document.isArchived ? <Banner id={document.id}/> : <Header document={document} />}
     </div>
   );
 }

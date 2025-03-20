@@ -40,7 +40,6 @@ export async function createDocument(
 
 export async function deleteDocument(id: string) {
   try {
-    
     //Delete parent document first
     await db
       .update(documentsTable)
@@ -83,7 +82,7 @@ export async function restoreDocument(id: string) {
     if (!restoredDocument[0]) {
       throw new Error("Document not found");
     }
-    
+
     return { success: true, data: restoredDocument[0] };
   } catch (e) {
     return {
@@ -95,12 +94,39 @@ export async function restoreDocument(id: string) {
 
 export async function removeForever(id: string) {
   try {
-    console.log('id', id)
-    const primise = await db.delete(documentsTable).where(eq(documentsTable.id, id)).returning();
-    console.log(primise)
+    console.log("id", id);
+    const primise = await db
+      .delete(documentsTable)
+      .where(eq(documentsTable.id, id))
+      .returning();
+    console.log(primise);
     return { success: true };
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return { success: false, error };
   }
+}
+
+export async function updateDocument(
+  id: string,
+  title?: string,
+  content?: string,
+  coverImage?: string,
+  icon?: string,
+  isPuplished?: boolean
+) {
+  const session = await auth();
+  const userId = session?.user.id;
+  if (!userId) {
+    return {success: false, error: 'Not authenticated'};
+  }
+
+  const document = await db.query.documentsTable.findFirst({where:eq(documentsTable.id, id)});
+  console.log(!document);
+  if (!document) {
+    return {success: false, error: 'Document not found'}
+  }
+
+  await db.update(documentsTable).set({title, content, coverImage, icon, isPuplished}).where(eq(documentsTable.id, id));
+  return {success: true}
 }
