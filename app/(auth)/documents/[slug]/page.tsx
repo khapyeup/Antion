@@ -3,6 +3,7 @@ import Header from "@/components/header";
 import db from "@/lib/db";
 import { documentsTable } from "@/lib/schema";
 import { eq } from "drizzle-orm";
+import { Suspense } from "react";
 
 export default async function Page({
   params,
@@ -15,11 +16,23 @@ export default async function Page({
   });
 
   if (!document) {
-    return <div>Cannot find document</div>;
+    return <div className="text-5xl text-center">Cannot find document</div>;
   }
   return (
-    <div className="flex flex-col overflow-hidden w-full">
-      {document.isArchived ? <Banner id={document.id}/> : <Header document={document} />}
+    <div className="flex flex-col w-full">
+      {document.isArchived ? (
+        <Banner id={document.id} />
+      ) : (
+        <Suspense
+          fallback={
+            <div className="p-2 w-full flex items-center animate-pulse ">
+              <div className="text-sm px-2 py-1 h-5 w-2 bg-neutral-400 rounded-md  "></div>
+            </div>
+          }
+        >
+          <Header document={document} />
+        </Suspense>
+      )}
     </div>
   );
 }

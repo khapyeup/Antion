@@ -4,20 +4,18 @@ import clsx from "clsx";
 import {
   ChevronsLeft,
   ChevronsRight,
-  File,
+
   Home,
   Plus,
-  Trash,
-  Undo2,
+  
 } from "lucide-react";
 import { useRef, useState } from "react";
 import UserItems from "./user-item";
-import { createDocument, restoreDocument } from "@/lib/action";
+import { createDocument } from "@/lib/action";
 import { toast } from "sonner";
 import Documents from "./documents";
 import { useSWRConfig } from "swr";
 import Link from "next/link";
-import { useTrash } from "@/hooks/useTrash";
 import TrashPanel from "./trash-panel";
 
 export default function Navigation() {

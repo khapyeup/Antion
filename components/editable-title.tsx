@@ -2,7 +2,6 @@
 
 import { updateDocument } from "@/lib/action";
 import { documentsTable } from "@/lib/schema";
-import { useRef, useState } from "react";
 import { useSWRConfig } from "swr";
 
 type Document = typeof documentsTable.$inferSelect;
@@ -26,7 +25,7 @@ export default function Title({ document }: { document: Document }) {
 
     // Revalidate the SWR cache for the document
     mutate(`/api/documents/${document.parentDocument}`);
-    mutate('/api/documents')
+    mutate("/api/documents");
   }
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
@@ -36,22 +35,24 @@ export default function Title({ document }: { document: Document }) {
 
   return (
     <div className="flex items-center gap-x-1">
-      {isEditing ? (
-        <input
-          value={title}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          type="text"
-          className="h-7 px-2 outline outline-neutral-300 rounded-md"
-        />
-      ) : (
-        <button
-          onClick={enableInput}
-          className="text-sm px-2 py-1 hover:bg-neutral-200 rounded-md cursor-pointer"
-        >
-          {title}
-        </button>
-      )}
+      <div>
+        {isEditing ? (
+          <input
+            value={title}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            type="text"
+            className="h-7 px-2 outline outline-neutral-300 rounded-md"
+          />
+        ) : (
+          <button
+            onClick={enableInput}
+            className="text-sm px-2 py-1 hover:bg-neutral-200 rounded-md cursor-pointer"
+          >
+            {title}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
