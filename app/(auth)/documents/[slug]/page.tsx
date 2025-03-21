@@ -1,5 +1,6 @@
 import Banner from "@/components/banner";
 import Header from "@/components/header";
+import Toolbar from "@/components/toolbar";
 import db from "@/lib/db";
 import { documentsTable } from "@/lib/schema";
 import { eq } from "drizzle-orm";
@@ -34,7 +35,11 @@ export default async function Page({
         </Suspense>
       )}
 
-      <div></div>
+      <div>
+        <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
+          <Toolbar initialData={document}/>
+        </div>
+      </div>
     </div>
   );
 }
