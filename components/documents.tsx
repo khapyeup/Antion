@@ -6,7 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import DocumentSkeleton from "@/components/document-skeletion";
 import { useDocument } from "@/hooks/useDocument";
-import { useChildDocument } from "@/hooks/useChildDocument";
+
 import { useSWRConfig } from "swr";
 import Link from "next/link";
 
@@ -17,7 +17,7 @@ export default function Documents({
   parentDocument: string | null;
   level: number;
 }) {
-  const { isLoading, data } = parentDocument ?  useChildDocument(parentDocument) : useDocument();
+  const { isLoading, data } = useDocument(parentDocument);
   if (isLoading) {
     return <DocumentSkeleton />;
   }
@@ -58,20 +58,20 @@ function Document({
   id: string;
   title: string;
   level: number;
-  parentDocument: string | null
+  parentDocument: string | null;
 }) {
   const [expanded, setIsExpanded] = useState(false);
-  const {mutate} = useSWRConfig();
-  
+  const { mutate } = useSWRConfig();
+
   function handleExpand() {
     setIsExpanded(!expanded);
   }
 
   async function handleCreateDocument(e: React.MouseEvent) {
     e.stopPropagation();
-    
+
     const promise = createDocument("Untitled", id).then(() => {
-      mutate(`/api/documents/${id}`)
+      mutate(`/api/documents/${id}`);
       if (!expanded) {
         setIsExpanded(true);
       }
@@ -91,7 +91,9 @@ function Document({
         throw new Error(result.error || "Failed to delete document");
       }
       // Revalidate both the parent document's children and the trash
-      const parentKey = parentDocument ? `/api/documents/${parentDocument}` : `/api/documents`;
+      const parentKey = parentDocument
+        ? `/api/documents/${parentDocument}`
+        : `/api/documents`;
       return Promise.all([
         mutate(parentKey), // Update the document list
         mutate("/api/trash"), // Update the trash

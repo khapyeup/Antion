@@ -12,20 +12,15 @@ export default function Dropdown({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="relative inline-block">
-      <div onClick={toggleDropdown}>{children}</div>
+      <div className="select-none px-2 py-1 hover:bg-neutral-200 rounded-md" onClick={toggleDropdown}>{children}</div>
 
       {isOpen && (
-        <div className="absolute mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
           <ul className="py-1">
             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-              Option 1
+              Delete
             </li>
-            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-              Option 2
-            </li>
-            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-              Option 3
-            </li>
+            
           </ul>
         </div>
       )}

@@ -2,6 +2,7 @@
 
 import { updateDocument } from "@/lib/action";
 import { documentsTable } from "@/lib/schema";
+import { useState } from "react";
 import { useSWRConfig } from "swr";
 
 type Document = typeof documentsTable.$inferSelect;

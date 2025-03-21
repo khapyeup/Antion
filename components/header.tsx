@@ -6,10 +6,10 @@ type Document = typeof documentsTable.$inferSelect;
 
 export default function Header({ document }: { document: Document }) {
   return (
-    <header className="p-2 w-full  flex items-center ">
+    <header className="p-2 w-full  flex justify-between items-center ">
       <Title document={document} />
       <Dropdown>
-        <div>...</div>
+        <div className="">...</div>
       </Dropdown>
     </header>
   );
