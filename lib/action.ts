@@ -112,7 +112,7 @@ export async function updateDocument(
   title?: string,
   content?: string,
   coverImage?: string,
-  icon?: string,
+  icon?: string | null,
   isPuplished?: boolean
 ) {
   const session = await auth();
