@@ -40,6 +40,7 @@ export default async function Page({
           <Toolbar initialData={document}/>
         </div>
       </div>
+      
     </div>
   );
 }
