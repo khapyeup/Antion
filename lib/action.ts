@@ -111,7 +111,7 @@ export async function updateDocument(
   id: string,
   title?: string,
   content?: string,
-  coverImage?: string,
+  coverImage?: string | null,
   icon?: string | null,
   isPuplished?: boolean
 ) {

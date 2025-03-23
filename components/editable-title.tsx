@@ -16,6 +16,7 @@ export default function Title({ document }: { document: Document }) {
   const { mutate } = useSWRConfig();
   const realtimeDocument = useDocumentRealtime(document.id);
   if (realtimeDocument.title !== undefined &&  realtimeDocument.title !== title) setTitle(realtimeDocument.title);
+  
 
   function enableInput() {
     setIsEditing(true);

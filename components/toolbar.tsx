@@ -7,8 +7,8 @@ import { useRef, useState, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateDocument } from "@/lib/action";
 import { useSWRConfig } from "swr";
-import { useDocumentRealtime } from "@/hooks/useDocumentRealtime";
 import CoverImageModal from "./cover-modal";
+import { supabase } from "@/lib/supabase";
 
 export default function Toolbar({
   initialData,
@@ -21,13 +21,39 @@ export default function Toolbar({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialData.title);
+  const [cover, setIsCover] = useState<string | null>(initialData.coverImage);
   const [icon, setIcon] = useState<string | null>(initialData.icon); // Explicitly allow null
-  const realtimeDoc = useDocumentRealtime(initialData.id);
 
-  if (realtimeDoc.icon !== undefined && realtimeDoc.icon !== icon)
-    setIcon(realtimeDoc.icon);
-  if (realtimeDoc.title !== undefined && realtimeDoc.title !== value)
-    setValue(realtimeDoc.title);
+  useEffect(() => {
+    const channel = supabase
+      .channel(`realtimew`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "documents",
+          filter: `id=eq.${initialData.id}`,
+        },
+        (payload) => {
+          const updatedDoc = payload.new as typeof documentsTable.$inferSelect;
+          if (updatedDoc.icon !== undefined && updatedDoc.icon !== icon)
+            setIcon(updatedDoc.icon);
+          if (updatedDoc.title !== undefined && updatedDoc.title !== value)
+            setValue(updatedDoc.title);
+          if (
+            updatedDoc.coverImage !== undefined &&
+            updatedDoc.coverImage !== value
+          ) {
+            setIsCover(updatedDoc.coverImage);
+          }
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [initialData]);
 
   function enableInput() {
     if (preview) return;
@@ -75,7 +101,7 @@ export default function Toolbar({
   }
 
   return (
-    <div className="pl-[54px] group/toolbar pt-30">
+    <div className="pl-[54px] group/toolbar">
       {!!icon && !preview && (
         <div className="flex items-center gap-x-2 pt-6 group/icon">
           <IconPicker onChange={changeEmoji}>
@@ -105,7 +131,7 @@ export default function Toolbar({
             </IconPicker>
           )}
 
-          {!initialData.coverImage && !preview && (
+          {!cover && !preview && (
             <CoverImageModal>
               <button className="cursor-pointer flex gap-1 items-center text-sm hover:bg-neutral-200/90 rounded-md p-2">
                 <Image className="size-5" />
