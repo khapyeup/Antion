@@ -34,12 +34,14 @@ export default function Documents({
         (item: {
           id: string;
           title: string;
+          icon: string | null,
           parentDocument: string | null;
         }) => (
           <Document
             key={item.id}
             id={item.id}
             title={item.title}
+            icon={item.icon}
             level={level}
             parentDocument={parentDocument}
           />
@@ -54,10 +56,12 @@ function Document({
   title,
   level,
   parentDocument,
+  icon
 }: {
   id: string;
   title: string;
   level: number;
+  icon: string | null;
   parentDocument: string | null;
 }) {
   const [expanded, setIsExpanded] = useState(false);
@@ -117,7 +121,11 @@ function Document({
       >
         <div className="flex items-center gap-1 flex-wrap text-gray-500">
           <File className="size-5" />
-          <span className="text-sm p-1">{title}</span>
+          <div className="flex items-center gap-1">
+          <span className="text-sm ">{icon}</span>
+          <span className="text-sm ">{title}</span>
+          </div>
+          
         </div>
         <div className="flex gap-2 items-center">
           <Trash

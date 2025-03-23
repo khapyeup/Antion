@@ -1,5 +1,6 @@
 "use client";
 
+import { useDocumentRealtime } from "@/hooks/useDocumentRealtime";
 import { updateDocument } from "@/lib/action";
 import { documentsTable } from "@/lib/schema";
 import { useState } from "react";
@@ -9,8 +10,12 @@ type Document = typeof documentsTable.$inferSelect;
 
 export default function Title({ document }: { document: Document }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [title, setTitle] = useState(document.title || "Untitled");
+  const [title, setTitle] = useState<string | undefined>(
+    document.title || "Untitled"
+  );
   const { mutate } = useSWRConfig();
+  const realtimeDocument = useDocumentRealtime(document.id);
+  if (realtimeDocument.title !== undefined &&  realtimeDocument.title !== title) setTitle(realtimeDocument.title);
 
   function enableInput() {
     setIsEditing(true);

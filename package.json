@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.8.0",
+    "@edgestore/react": "^0.3.3",
+    "@edgestore/server": "^0.3.3",
     "@supabase/supabase-js": "^2.49.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.40.0",
@@ -20,10 +22,13 @@
     "postgres": "^3.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
     "react-textarea-autosize": "^8.5.8",
     "react-toastify": "^11.0.5",
     "sonner": "^2.0.1",
-    "swr": "^2.3.3"
+    "swr": "^2.3.3",
+    "tailwind-merge": "^3.0.2",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

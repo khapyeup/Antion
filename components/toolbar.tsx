@@ -7,7 +7,8 @@ import { useRef, useState, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateDocument } from "@/lib/action";
 import { useSWRConfig } from "swr";
-import { supabase } from "@/lib/supabase";
+import { useDocumentRealtime } from "@/hooks/useDocumentRealtime";
+import CoverImageModal from "./cover-modal";
 
 export default function Toolbar({
   initialData,
@@ -21,35 +22,12 @@ export default function Toolbar({
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialData.title);
   const [icon, setIcon] = useState<string | null>(initialData.icon); // Explicitly allow null
+  const realtimeDoc = useDocumentRealtime(initialData.id);
 
-  // Subscribe to real-time updates
-  useEffect(() => {
-    if (preview) return;
-
-    const channel = supabase
-      .channel(`document-${initialData.id}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "documents",
-          filter: `id=eq.${initialData.id}`,
-        },
-        (payload) => {
-          const updatedDoc = payload.new as typeof documentsTable.$inferSelect;
-          // Update icon only if it’s different
-          if (updatedDoc.icon !== icon) {
-            setIcon(updatedDoc.icon); // Handle null or string
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [initialData.id, icon, mutate, preview]);
+  if (realtimeDoc.icon !== undefined && realtimeDoc.icon !== icon)
+    setIcon(realtimeDoc.icon);
+  if (realtimeDoc.title !== undefined && realtimeDoc.title !== value)
+    setValue(realtimeDoc.title);
 
   function enableInput() {
     if (preview) return;
@@ -89,8 +67,7 @@ export default function Toolbar({
         undefined,
         undefined,
         newIcon || null
-      );
-      
+      ).then(() => mutate("/api/documents"));
     } catch (error) {
       console.error("Failed to update icon:", error);
       setIcon(initialData.icon); // Revert to initial value on error
@@ -102,7 +79,9 @@ export default function Toolbar({
       {!!icon && !preview && (
         <div className="flex items-center gap-x-2 pt-6 group/icon">
           <IconPicker onChange={changeEmoji}>
-            <p className="text-6xl hover:opacity-75 transition select-none">{icon}</p>
+            <p className="text-6xl hover:opacity-75 transition select-none">
+              {icon}
+            </p>
           </IconPicker>
           <button
             onClick={() => changeEmoji("")} // Remove icon by setting it to empty string/null
@@ -115,7 +94,7 @@ export default function Toolbar({
 
       {!!icon && preview && <p className="text-6xl pt-6">{icon}</p>}
 
-      <div className="opacity-0 group-hover/toolbar:opacity-100 mt-5">
+      <div className="mt-5">
         <div className="flex">
           {!icon && !preview && (
             <IconPicker onChange={changeEmoji}>
@@ -127,10 +106,12 @@ export default function Toolbar({
           )}
 
           {!initialData.coverImage && !preview && (
-            <button className="cursor-pointer flex gap-1 items-center text-sm hover:bg-neutral-200/90 rounded-md p-2">
-              <Image className="size-5" />
-              Add cover
-            </button>
+            <CoverImageModal>
+              <button className="cursor-pointer flex gap-1 items-center text-sm hover:bg-neutral-200/90 rounded-md p-2">
+                <Image className="size-5" />
+                Add cover
+              </button>
+            </CoverImageModal>
           )}
         </div>
       </div>
@@ -150,7 +131,7 @@ export default function Toolbar({
           onClick={enableInput}
           className="text-5xl mt-5 font-bold break-words outline-none text-[#3F3F3F]"
         >
-          {initialData.title}
+          {value}
         </div>
       )}
     </div>
