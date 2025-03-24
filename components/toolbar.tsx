@@ -93,7 +93,7 @@ export default function Toolbar({
         undefined,
         undefined,
         newIcon || null
-      ).then(() => mutate("/api/documents"));
+      ).then(() => {mutate("/api/documents"); mutate(`/api/documents/${initialData.parentDocument}`)});
     } catch (error) {
       console.error("Failed to update icon:", error);
       setIcon(initialData.icon); // Revert to initial value on error
@@ -132,7 +132,7 @@ export default function Toolbar({
           )}
 
           {!cover && !preview && (
-            <CoverImageModal>
+            <CoverImageModal urlCoverImage={undefined}>
               <button className="cursor-pointer flex gap-1 items-center text-sm hover:bg-neutral-200/90 rounded-md p-2">
                 <Image className="size-5" />
                 Add cover

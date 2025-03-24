@@ -6,6 +6,7 @@ import { documentsTable } from "@/lib/schema";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import CoverImageModal from "./cover-modal";
+import { useEdgeStore } from "@/lib/edgestore";
 
 export default function Cover({
   document,
@@ -13,10 +14,14 @@ export default function Cover({
   document: typeof documentsTable.$inferSelect;
 }) {
   const [cover, setCover] = useState(document.coverImage);
-  
+  const { edgestore } = useEdgeStore();
 
   function handleRemove() {
-    updateDocument(document.id, undefined, undefined, null);
+    updateDocument(document.id, undefined, undefined, null).then(async () => {
+      if (cover) {
+        await edgestore.publicFiles.delete({ url: cover });
+      }
+    });
   }
 
   useEffect(() => {
@@ -32,7 +37,7 @@ export default function Cover({
         },
         (payload) => {
           const updatedDoc = payload.new as typeof documentsTable.$inferSelect;
-          
+
           setCover(updatedDoc.coverImage);
         }
       )
@@ -47,8 +52,7 @@ export default function Cover({
       {cover && <img className="h-full w-full object-cover" src={cover} />}
       {cover && (
         <div className="absolute left-1/2 top-[32px] flex gap-2 opacity-0 group-hover/modify:opacity-100">
-          
-          <CoverImageModal>
+          <CoverImageModal urlCoverImage={cover}>
             <button className="px-2 py-1 bg-neutral-200 rounded-md hover:bg-neutral-300">
               Change cover
             </button>

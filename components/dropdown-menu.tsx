@@ -11,7 +11,7 @@ export default function Dropdown({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="relative inline-block">
+    <div className="relative z-[9999999999] inline-block">
       <div className="select-none px-2 py-1 hover:bg-neutral-200 rounded-md" onClick={toggleDropdown}>{children}</div>
 
       {isOpen && (
