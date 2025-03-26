@@ -18,7 +18,7 @@ export default function Publish({
   const origin = useOrigin();
   const url = `${origin}/preview/${document.id}`;
   async function onPublish() {
-    setIsSubmitting(true);
+    
     const promise = updateDocument(
       document.id,
       undefined,
@@ -26,7 +26,7 @@ export default function Publish({
       undefined,
       undefined,
       true
-    ).finally(() => setIsSubmitting(false));
+    )
     toast.promise(promise, {
       loading: "Publishing...",
       success: "Published",
