@@ -1,14 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import {
-  ChevronsLeft,
-  ChevronsRight,
-
-  Home,
-  Plus,
-  
-} from "lucide-react";
+import { ChevronsLeft, ChevronsRight, Home, Plus } from "lucide-react";
 import { useRef, useState } from "react";
 import UserItems from "./user-item";
 import { createDocument } from "@/lib/action";
@@ -22,9 +15,8 @@ export default function Navigation() {
   const asideRef = useRef<HTMLDivElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
   const [collapsed, setCollapsed] = useState(false);
-  
+
   const { mutate } = useSWRConfig();
-  
 
   function handleResize(e: React.MouseEvent) {
     e.preventDefault();
@@ -74,8 +66,6 @@ export default function Navigation() {
     });
   }
 
-  
-
   return (
     <>
       <aside
@@ -111,7 +101,7 @@ export default function Navigation() {
 
           <Documents parentDocument={null} level={0} />
         </div>
-        <TrashPanel/>
+        <TrashPanel />
         <div
           onMouseDown={handleResize}
           className="opacity-0 group-hover/sidebar:opacity-100 w-1 transition top-0 bg-gray-300 h-full cursor-e-resize absolute right-0"
@@ -129,5 +119,5 @@ export default function Navigation() {
         />
       </div>
     </>
-  )
+  );
 }

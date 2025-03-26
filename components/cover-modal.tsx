@@ -6,7 +6,6 @@ import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useEdgeStore } from "@/lib/edgestore";
 import { updateDocument } from "@/lib/action";
 import { useParams } from "next/navigation";
-import { documentsTable } from "@/lib/schema";
 
 export default function CoverImageModal({
   children,

@@ -1,6 +1,5 @@
 "use client";
 
-import { useDocumentRealtime } from "@/hooks/useDocumentRealtime";
 import { updateDocument } from "@/lib/action";
 import { documentsTable } from "@/lib/schema";
 import { supabase } from "@/lib/supabase";
@@ -10,8 +9,10 @@ import { useEdgeStore } from "@/lib/edgestore";
 
 export default function Cover({
   document,
+  preview,
 }: {
   document: typeof documentsTable.$inferSelect;
+  preview?: boolean
 }) {
   const [cover, setCover] = useState(document.coverImage);
   const { edgestore } = useEdgeStore();
@@ -49,8 +50,8 @@ export default function Cover({
 
   return (
     <div className={`${cover ? "h-[35vh]" : "h-[12vh]"} relative group/modify`}>
-      {cover && <img className="h-full w-full object-cover" src={cover} />}
-      {cover && (
+      {cover && <img className="h-full w-full object-cover" src={cover} alt="cover"/>}
+      {cover && !preview && (
         <div className="absolute left-1/2 top-[32px] flex gap-2 opacity-0 group-hover/modify:opacity-100">
           <CoverImageModal urlCoverImage={cover}>
             <button className="px-2 py-1 bg-neutral-200 rounded-md hover:bg-neutral-300">

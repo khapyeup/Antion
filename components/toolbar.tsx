@@ -2,7 +2,7 @@
 
 import { documentsTable } from "@/lib/schema";
 import IconPicker from "./icon-picker";
-import { Image, Smile, X } from "lucide-react";
+import {  Smile, X } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateDocument } from "@/lib/action";
@@ -53,7 +53,7 @@ export default function Toolbar({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [initialData]);
+  }, [initialData, icon, value]);
 
   function enableInput() {
     if (preview) return;
@@ -134,7 +134,7 @@ export default function Toolbar({
           {!cover && !preview && (
             <CoverImageModal urlCoverImage={undefined}>
               <button className="cursor-pointer flex gap-1 items-center text-sm hover:bg-neutral-200/90 rounded-md p-2">
-                <Image className="size-5" />
+                
                 Add cover
               </button>
             </CoverImageModal>

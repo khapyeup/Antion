@@ -12,16 +12,21 @@ import { Suspense } from "react";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ previewId: string }>;
 }) {
-  const { slug } = await params;
+  const { previewId } = await params;
   const document = await db.query.documentsTable.findFirst({
-    where: eq(documentsTable.id, slug),
+    where: eq(documentsTable.id, previewId),
   });
 
   if (!document) {
     return <div className="text-5xl text-center">Cannot find document</div>;
+  } else if (!document.isPuplished) {
+    return <div className="flex items-center justify-center h-screen w-full">
+        <h1 className="text-2xl font-bold text-red-500">You do not have permission to see this document</h1>
+    </div>
   }
+
   
   return (
     <div className="flex flex-col w-full">
@@ -35,7 +40,7 @@ export default async function Page({
             </div>
           }
         >
-          <Header document={document} />
+          <Header preview={true} document={document} />
         </Suspense>
       )}
 
@@ -47,13 +52,13 @@ export default async function Page({
           </div>
         }
       >
-        <Cover document={document} />
+        <Cover preview={true} document={document} />
       </Suspense>
 
       <div>
         <div className="md:max-w-3xl lg:max-w-4xl mx-auto space-y-10">
-          <Toolbar initialData={document} />
-          <Editor document={document}/>
+          <Toolbar preview={true} initialData={document} />
+          <Editor preview={true} document={document}/>
         </div>
       </div>
     </div>
